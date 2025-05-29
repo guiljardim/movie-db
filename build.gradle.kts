@@ -8,9 +8,6 @@ buildscript {
         classpath(libs.gradle.kotlin)
         classpath(libs.gradle.hilt)
         classpath(libs.gradle.safe.args)
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
     }
 }
 

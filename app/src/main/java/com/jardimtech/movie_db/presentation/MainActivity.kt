@@ -1,11 +1,11 @@
-package com.jardimtech.movie_db
+package com.jardimtech.movie_db.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.navigation.compose.rememberNavController
 import com.jardimtech.movie_db.presentation.navigation.AppNavigation
-import com.jardimtech.movie_db.ui.theme.MovieTheme
+import com.jardimtech.movie_db.presentation.theme.MovieTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

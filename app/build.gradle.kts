@@ -142,4 +142,5 @@ dependencies {
     testImplementation(libs.robolectric)
     testImplementation(libs.androidx.core.test)
     testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation("androidx.paging:paging-testing:3.3.0-alpha01")
 }

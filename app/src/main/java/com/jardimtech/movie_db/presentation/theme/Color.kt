@@ -1,4 +1,4 @@
-package com.jardimtech.movie_db.ui.theme
+package com.jardimtech.movie_db.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 

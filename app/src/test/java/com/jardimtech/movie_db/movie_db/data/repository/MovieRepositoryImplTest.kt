@@ -45,4 +45,17 @@ class MovieRepositoryImplTest {
         assertEquals("Inception", snapshot[1].title)
 
     }
+
+    @Test
+    fun `getMovieById should return the correct movie`() = runTest {
+        val movieDto = MovieDto(42, "Interstellar", "/poster.jpg", "Space travel")
+        whenever(api.getMovieById(42)).thenReturn(movieDto)
+
+        val result = repository.getMovieById(42)
+
+        assertEquals(42, result.id)
+        assertEquals("Interstellar", result.title)
+        assertEquals("https://image.tmdb.org/t/p/w500/poster.jpg", result.posterUrl)
+        assertEquals("Space travel", result.overview)
+    }
 }

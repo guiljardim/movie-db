@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.NavHostController
 import androidx.navigation.navArgument
 import com.jardimtech.movie_db.presentation.SplashScreen
+import com.jardimtech.movie_db.presentation.home.HomeScreen
 
 object Routes {
     const val SPLASH = "splash"
@@ -25,7 +26,7 @@ fun AppNavigation(navController: NavHostController) {
             SplashScreen(navController)
         }
         composable(Routes.HOME) {
-            //HomeScreen(navController)
+            HomeScreen(navController)
         }
         composable(
             route = Routes.DETAILS,

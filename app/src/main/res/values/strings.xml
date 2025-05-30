@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">movie_db</string>
+    <string name="app_name">Movie DB</string>
+    <string name="popular_movies_title">Popular Movies</string>
+    <string name="poster_content_description">Movie poster for %1$s</string>
 </resources>

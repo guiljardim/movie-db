@@ -19,12 +19,18 @@ class MovieDetailViewModel @Inject constructor(
 
     fun loadMovie(id: Int) {
         viewModelScope.launch {
-            try {
-                val movie = getMovieByIdUseCase(id)
-                _uiState.value = MovieDetailUiState.Success(movie)
-            } catch (e: Exception) {
-                _uiState.value = MovieDetailUiState.Error("Erro ao carregar detalhes")
-            }
+            _uiState.value = MovieDetailUiState.Loading
+
+            val result = getMovieByIdUseCase(id)
+            _uiState.value = result.fold(
+                onSuccess = { movie -> MovieDetailUiState.Success(movie) },
+                onFailure = { throwable ->
+                    MovieDetailUiState.Error(
+                        throwable.message ?: "Erro desconhecido ao carregar detalhes"
+                    )
+                }
+            )
         }
     }
 }
+

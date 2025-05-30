@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.NavHostController
 import androidx.navigation.navArgument
 import com.jardimtech.movie_db.presentation.SplashScreen
+import com.jardimtech.movie_db.presentation.detail.MovieDetailScreen
 import com.jardimtech.movie_db.presentation.home.HomeScreen
 
 object Routes {
@@ -34,7 +35,7 @@ fun AppNavigation(navController: NavHostController) {
         ) { backStackEntry ->
             val movieId = backStackEntry.arguments?.getInt("movieId")
             movieId?.let {
-                //MovieDetailsScreen(navController, movieId)
+                MovieDetailScreen(navController = navController, movieId = it)
             }
         }
     }

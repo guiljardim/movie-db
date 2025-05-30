@@ -6,6 +6,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.jardimtech.movie_db.data.api.MovieApi
 import com.jardimtech.movie_db.data.paging.MoviePagingSource
+import com.jardimtech.movie_db.domain.mapper.toDomain
 import com.jardimtech.movie_db.domain.model.Movie
 import com.jardimtech.movie_db.domain.repository.MovieRepository
 import kotlinx.coroutines.flow.Flow
@@ -20,5 +21,9 @@ class MovieRepositoryImpl @Inject constructor(
             config = PagingConfig(pageSize = 20),
             pagingSourceFactory = { MoviePagingSource(api) }
         ).flow
+    }
+
+    override suspend fun getMovieById(id: Int): Movie {
+        return api.getMovieById(id).toDomain()
     }
 }

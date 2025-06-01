@@ -23,7 +23,6 @@ class GetMovieByIdUseCaseTest {
 
     @Test
     fun `invoke should return success when repository returns movie wrapped in Result`() = runTest {
-        // Arrange
         val movie = Movie(
             id = 10,
             title = "Tenet",
@@ -32,10 +31,8 @@ class GetMovieByIdUseCaseTest {
         )
         whenever(repository.getMovieById(10)).thenReturn(Result.success(movie))
 
-        // Act
         val result = useCase(10)
 
-        // Assert
         assertTrue(result.isSuccess)
         assertEquals("Tenet", result.getOrNull()?.title)
         assertEquals(10, result.getOrNull()?.id)
@@ -43,14 +40,11 @@ class GetMovieByIdUseCaseTest {
 
     @Test
     fun `invoke should return failure when repository returns Result failure`() = runTest {
-        // Arrange
         val exception = RuntimeException("Something went wrong")
         whenever(repository.getMovieById(10)).thenReturn(Result.failure(exception))
 
-        // Act
         val result = useCase(10)
 
-        // Assert
         assertTrue(result.isFailure)
         assertEquals("Something went wrong", result.exceptionOrNull()?.message)
     }

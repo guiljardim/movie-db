@@ -46,14 +46,11 @@ class MovieRepositoryImplTest {
 
     @Test
     fun `getMovieById should return the correct movie wrapped in Result`() = runTest {
-        // Arrange
         val movieDto = MovieDto(42, "Interstellar", "/poster.jpg", "Space travel")
         whenever(api.getMovieById(42)).thenReturn(movieDto)
 
-        // Act
         val result = repository.getMovieById(42)
 
-        // Assert
         assertTrue(result.isSuccess)
 
         val movie = result.getOrNull()
@@ -66,13 +63,10 @@ class MovieRepositoryImplTest {
 
     @Test
     fun `getMovieById should return failure when api throws exception`() = runTest {
-        // Arrange
         whenever(api.getMovieById(999)).thenThrow(RuntimeException("API error"))
 
-        // Act
         val result = repository.getMovieById(999)
 
-        // Assert
         assertTrue(result.isFailure)
         assertEquals("API error", result.exceptionOrNull()?.message)
     }

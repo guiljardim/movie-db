@@ -2,4 +2,6 @@
     <string name="app_name">Movie DB</string>
     <string name="popular_movies_title">Popular Movies</string>
     <string name="poster_content_description">Movie poster for %1$s</string>
+    <string name="details_title">Details</string>
+    <string name="back_content_description">back</string>
 </resources>

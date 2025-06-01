@@ -3,31 +3,21 @@ package com.jardimtech.movie_db.presentation.home
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.rememberAsyncImagePainter
 import com.jardimtech.movie_db.R
@@ -52,12 +42,9 @@ fun HomeScreen(navController: NavController, viewModel: MovieViewModel = hiltVie
 
         is HomeUiState.Success -> {
             val movies = state.movies.collectAsLazyPagingItems()
-            HomeContent(
-                movies = List(movies.itemCount) { movies[it] },
-                onItemClick = { movie ->
-                    navController.navigate(Routes.details(movie.id))
-                }
-            )
+            HomeContent(movies = movies, onItemClick = {
+                navController.navigate(Routes.details(it.id))
+            })
         }
 
         is HomeUiState.Error -> {
@@ -80,7 +67,7 @@ fun HomeScreen(navController: NavController, viewModel: MovieViewModel = hiltVie
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeContent(
-    movies: List<Movie?>,
+    movies: androidx.paging.compose.LazyPagingItems<Movie>,
     onItemClick: (Movie) -> Unit
 ) {
     Scaffold(
@@ -93,7 +80,7 @@ fun HomeContent(
         }
     ) { paddingValues ->
         LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
+            columns = GridCells.Adaptive(minSize = 160.dp),
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
@@ -102,11 +89,16 @@ fun HomeContent(
             verticalArrangement = Arrangement.spacedBy(12.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            items(movies.size) { index ->
-                val movie = movies[index]
-                movie?.let {
-                    MovieItem(movie = it) {
-                        onItemClick(it)
+            items(movies.itemCount) { index ->
+                movies[index]?.let { movie ->
+                    MovieItem(movie = movie, onClick = { onItemClick(movie) })
+                }
+            }
+
+            if (movies.loadState.append is LoadState.Loading) {
+                item(span = { GridItemSpan(maxLineSpan) }) {
+                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator(modifier = Modifier.padding(16.dp))
                     }
                 }
             }
@@ -122,7 +114,10 @@ fun MovieItem(movie: Movie, onClick: () -> Unit) {
             .clickable(onClick = onClick)
     ) {
         Image(
-            painter = rememberAsyncImagePainter(movie.posterUrl),
+            painter = rememberAsyncImagePainter(
+                model = movie.posterUrl,
+                placeholder = painterResource(id = R.drawable.placeholder)
+            ),
             contentDescription = stringResource(
                 id = R.string.poster_content_description,
                 movie.title
